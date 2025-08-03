@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Questionbox = () => {
   const [question, setQuestion] = useState('');
   const [length, setLength] = useState('medium');
   const [selectedModes, setSelectedModes] = useState([]);
+  const navigate = useNavigate();
 
   function handleModeToggle(mode) {
     setSelectedModes((prev) =>
-      prev.includes(mode)
-        ? prev.filter((m) => m !== mode)
-        : [...prev, mode]
+      prev.includes(mode) ? prev.filter((m) => m !== mode) : [...prev, mode]
     );
   }
+
+  const handleSubmit = () => {
+    if (!question.trim() || selectedModes.length === 0) {
+      alert('Please enter a question and select at least one mode.');
+      return;
+    }
+
+    navigate('/nature', {
+      state: {
+        question,
+        length,
+        selectedModes,
+      },
+    });
+  };
 
   return (
     <div>
@@ -27,91 +42,45 @@ const Questionbox = () => {
 
         <label className="block font-semibold">📏 Choose answer length</label>
         <div className="flex gap-4">
-          <label>
-            <input
-              type="radio"
-              name="length"
-              value="short"
-              checked={length === 'short'}
-              onChange={(e) => setLength(e.target.value)}
-            />{' '}
-            Short
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="length"
-              value="medium"
-              checked={length === 'medium'}
-              onChange={(e) => setLength(e.target.value)}
-            />{' '}
-            Medium
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="length"
-              value="long"
-              checked={length === 'long'}
-              onChange={(e) => setLength(e.target.value)}
-            />{' '}
-            Long
-          </label>
+          {['short', 'medium', 'long'].map((l) => (
+            <label key={l}>
+              <input
+                type="radio"
+                name="length"
+                value={l}
+                checked={length === l}
+                onChange={(e) => setLength(e.target.value)}
+              />{' '}
+              {l.charAt(0).toUpperCase() + l.slice(1)}
+            </label>
+          ))}
         </div>
 
         <label className="block font-semibold">🧠 Select mode(s)</label>
         <div className="grid grid-cols-2 gap-2">
-          <label>
-            <input
-              type="checkbox"
-              checked={selectedModes.includes('honest')}
-              onChange={() => handleModeToggle('honest')}
-            />{' '}
-            ❤️ Honest
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={selectedModes.includes('ai')}
-              onChange={() => handleModeToggle('ai')}
-            />{' '}
-            🤖 AI-like
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={selectedModes.includes('monk')}
-              onChange={() => handleModeToggle('monk')}
-            />{' '}
-            🧘 Monk-like
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={selectedModes.includes('funny')}
-              onChange={() => handleModeToggle('funny')}
-            />{' '}
-            🤡 Funny
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={selectedModes.includes('philosophical')}
-              onChange={() => handleModeToggle('philosophical')}
-            />{' '}
-            🔮 Philosophical
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={selectedModes.includes('devil')}
-              onChange={() => handleModeToggle('Devil')}
-            />{' '}
-            😈 Devil 
-          </label>
+          {[
+            { key: 'honest', label: '❤️ Honest' },
+            { key: 'ai', label: '🤖 AI-like' },
+            { key: 'monk', label: '🧘 Monk-like' },
+            { key: 'funny', label: '🤡 Funny' },
+            { key: 'philosophical', label: '🔮 Philosophical' },
+            { key: 'devil', label: '😈 Devil' },
+          ].map((mode) => (
+            <label key={mode.key}>
+              <input
+                type="checkbox"
+                checked={selectedModes.includes(mode.key)}
+                onChange={() => handleModeToggle(mode.key)}
+              />{' '}
+              {mode.label}
+            </label>
+          ))}
         </div>
 
-        <button className="w-full bg-black text-white py-3 rounded-xl hover:bg-gray-800 transition-all">
+        <button
+          className="w-full bg-black text-white py-3 rounded-xl hover:bg-gray-800 transition-all"
+          onClick={handleSubmit}
+        >
           🎲 Generate Answers
         </button>
       </div>

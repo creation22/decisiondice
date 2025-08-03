@@ -1,9 +1,11 @@
-"use client";
-import { motion } from "motion/react";
+// Remove this line unless you're using Next.js App Router
+// "use client";
+
+import { motion } from "framer-motion"; // Correct animation lib
 import { HeroHighlight, Highlight } from "./hero-highlight";
 import Questionbox from "./Questionbox";
 
-export default  function Hero() {
+export default function Hero() {
   return (
     <HeroHighlight>
       <motion.h1
@@ -19,17 +21,17 @@ export default  function Hero() {
           duration: 0.5,
           ease: [0.4, 0.0, 0.2, 1],
         }}
-        className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-neutral-700 dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto ">
-        One question. Five answers. Endless clarity  Introducing 
-        {" "}
+        className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-neutral-700 dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto"
+      >
+        One question. Five answers. Endless clarity. Introducing{" "}
         <Highlight className="text-black dark:text-white">
           Perspectify
         </Highlight>
       </motion.h1>
-      <div>
-        <Questionbox/>
+
+      <div className="mt-8">
+        <Questionbox />
       </div>
     </HeroHighlight>
   );
 }
-
